@@ -1,0 +1,81 @@
+[build-system]
+requires = ["hatchling==1.27.0"]
+build-backend = "hatchling.build"
+
+[project]
+name = "news-sentiment-trading-algo"
+version = "1.1.1"
+description = "Strict-prior research software for daily equity news-sentiment trading signals"
+readme = "README.md"
+requires-python = ">=3.12,<3.14"
+license = { text = "MIT" }
+authors = [{ name = "Rafael Jerónimo Aragón" }]
+dependencies = [
+  "matplotlib>=3.9,<4",
+  "numpy>=2.0,<3",
+  "pandas>=2.2,<3",
+  "scipy>=1.13,<2",
+]
+
+[project.urls]
+Repository = "https://github.com/RafaJeroA/news-sentiment-trading-algo"
+Documentation = "https://github.com/RafaJeroA/news-sentiment-trading-algo#readme"
+
+[project.optional-dependencies]
+dev = [
+  "hatchling==1.27.0",
+  "hypothesis>=6.120,<7",
+  "mypy>=1.14,<2",
+  "nbclient>=0.10,<1",
+  "nbformat>=5.10,<6",
+  "pandas-stubs>=2.2",
+  "pytest>=8.3,<9",
+  "pytest-cov>=6,<7",
+  "ruff>=0.9,<1",
+  "scipy-stubs>=1.16,<2",
+]
+
+[project.scripts]
+news-sentiment-trading = "news_sentiment_trading.cli:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/news_sentiment_trading"]
+
+[tool.hatch.build.targets.wheel.force-include]
+"configs/primary.toml" = "news_sentiment_trading/resources/primary.toml"
+
+[tool.hatch.build.targets.sdist]
+include = [
+  "/CITATION.cff",
+  "/LICENSE",
+  "/README.md",
+  "/THIRD_PARTY_NOTICES.md",
+  "/configs/primary.toml",
+  "/pyproject.toml",
+  "/src/news_sentiment_trading/**",
+]
+
+[tool.pytest.ini_options]
+addopts = "-ra --strict-config --strict-markers"
+testpaths = ["tests"]
+filterwarnings = [
+  "ignore:The locs attribute was deprecated.*:matplotlib.MatplotlibDeprecationWarning",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["B", "E", "F", "I", "N", "UP"]
+ignore = ["E501"]
+
+[tool.mypy]
+python_version = "3.12"
+strict = true
+warn_unreachable = true
+packages = ["news_sentiment_trading"]
+
+[tool.coverage.run]
+branch = true
+source = ["news_sentiment_trading"]

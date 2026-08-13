@@ -1,0 +1,24 @@
+* text=auto eol=lf
+
+*.bat text eol=crlf
+*.cmd text eol=crlf
+
+*.7z binary
+*.doc binary
+*.docx binary
+*.gif binary
+*.gz binary
+*.ico binary
+*.jpeg binary
+*.jpg binary
+*.npz binary
+*.parquet binary
+*.pdf binary
+*.pickle binary
+*.pkl binary
+*.png binary
+*.ppt binary
+*.pptx binary
+*.sqlite binary
+*.xlsx binary
+*.zip binary

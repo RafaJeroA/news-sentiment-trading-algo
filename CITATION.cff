@@ -1,0 +1,20 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it using the metadata below."
+title: "News Sentiment Trading Research"
+type: software
+authors:
+  - family-names: "Jerónimo Aragón"
+    given-names: "Rafael"
+version: 1.1.1
+date-released: 2026-08-13
+license: MIT
+abstract: >-
+  Research software for walk-forward evaluation of daily equity news-sentiment
+  signals with explicit timing, transaction costs, and uncertainty analysis.
+repository-code: "https://github.com/RafaJeroA/news-sentiment-trading-algo"
+keywords:
+  - walk-forward validation
+  - news sentiment
+  - quantitative finance
+  - reproducible research
+  - backtesting

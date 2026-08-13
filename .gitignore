@@ -1,0 +1,35 @@
+# External source material
+*.zip
+data/raw/
+data/private/
+source_extract/
+.audit-work/
+
+# Python
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+*.egg-info/
+dist/
+build/
+
+# Local artifacts
+.ipynb_checkpoints/
+reports/artifacts/
+tmp/
+
+# Editors and operating systems
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+
+# Local environment and secrets
+.env
+.env.*
+!.env.example

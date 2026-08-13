@@ -1,0 +1,43 @@
+[research]
+seed = 20260801
+annualization = 252
+risk_free_rate = 0.0
+primary_cost_bps = 10
+cost_scenarios_bps = [0, 5, 10, 25, 50, 100]
+
+[universe]
+primary = ["AAPL", "AMZN", "DB", "DIS", "FB", "GOOG", "HSBC", "JPM", "MSFT", "PFE"]
+start = "2018-01-02"
+end = "2020-05-22"
+
+[execution]
+convention = "next_adjusted_open"
+holding_days = 1
+missing_policy = "no_fill"
+bounded_forward_fill_days = 1
+
+[portfolio]
+primary = "long_only"
+long_only_weight_per_asset = 0.20
+neutral_gross_limit = 1.0
+neutral_net_limit = 0.0
+one_sided_neutral_policy = "cash"
+
+[walk_forward]
+outer_initial_sessions = 252
+outer_test_sessions = 58
+inner_initial_sessions = 126
+inner_test_sessions = 42
+minimum_active_fraction = 0.02
+minimum_active_asset_days = 20
+maximum_annualized_turnover = 52.0
+selection_cost_bps = 10
+
+[features]
+primary_kind = "ratio"
+windows = [20, 50]
+z_thresholds = [1.5, 2.0]
+rvt_quantiles = [0.5, 0.75]
+fixed_window = 20
+fixed_z_threshold = 1.5
+fixed_rvt_quantile = 0.5
