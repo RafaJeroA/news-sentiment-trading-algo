@@ -1,61 +1,48 @@
-# News Sentiment Trading Research
+﻿# News Sentiment Trading Research
 
-This repository implements a walk-forward research framework for testing whether daily equity
-news-sentiment extremes contain information about subsequent returns. It emphasizes observable
-timing, training-only model selection, explicit portfolio accounting, transaction costs, and
-reproducible synthetic verification.
+This project studies whether unusually positive or negative daily news sentiment, combined with elevated news activity, contains information about subsequent equity returns.
+
+It started as a two-stock course exercise. I later expanded it to ten equities and replaced the original in-sample analysis with a walk-forward design, explicit execution timing, transaction costs and leakage checks.
 
 ## Research question
 
-Do unusually positive or negative daily news signals, when accompanied by elevated news activity,
-predict subsequent equity returns after realistic timing and out-of-sample evaluation?
+Do daily sentiment extremes predict subsequent equity returns after point-in-time feature construction, training-only parameter selection and realistic execution timing?
 
-## Why this project exists
-
-The project began as a two-stock academic exercise. A later review found that the original analysis
-used the same sample for parameter choice and evaluation, left execution timing ambiguous, and did
-not fully reconcile portfolio returns and risk statistics. The implementation here turns that idea
-into a falsifiable ten-equity study with a locked design and explicit failure criteria.
+The purpose of the repository is to test that question carefully. It does not assume that the strategy must be profitable.
 
 ## Research design
 
-- **Universe:** ten equities on a shared 602-session calendar, with missing sentiment represented as
-  an explicit no-signal state.
-- **Timing:** news dated `t` is treated as available after close, trades at adjusted open `t+1`, and
-  earns the adjusted-open return ending `t+2`.
-- **Features:** rolling means, dispersion, and news-intensity thresholds use observations strictly
-  before the signal date.
-- **Selection:** eight shared parameter combinations are evaluated inside ordered training blocks;
-  six non-overlapping outer blocks are used once each.
-- **Portfolio:** the primary strategy is long-only with 20% per-name caps, residual cash, and a
-  10-basis-point one-way transaction-cost assumption.
-- **Evaluation:** compounded performance, drawdowns, turnover, exposure, cross-sectional rank IC,
-  HAC uncertainty, Holm adjustment, block-bootstrap intervals, and predefined sensitivity analyses.
-- **Leakage controls:** mutation tests verify that future data cannot change earlier features,
-  parameter choices, or completed fold outputs.
+- **Universe:** ten equities on a common 602-session calendar.
+- **Timing:** news dated `t` is assumed available after the close, executes at the adjusted open on `t+1`, and earns the following adjusted-open return.
+- **Features:** rolling means, dispersion and news-intensity thresholds use only observations before the signal date.
+- **Selection:** eight parameter combinations are evaluated using ordered training blocks.
+- **Evaluation:** six non-overlapping outer test blocks are used once each.
+- **Portfolio:** the main specification is long-only, with a 20% cap per name and residual cash.
+- **Costs:** the primary strategy applies a 10-basis-point one-way transaction cost.
+- **Leakage checks:** tests verify that future observations cannot change earlier features, selected parameters or completed folds.
 
-The full specification is in [Research design](docs/RESEARCH_DESIGN.md). The original locked plan
-and subsequent amendments are retained in [Preregistration](docs/PRE_REGISTRATION.md) and
-[Preregistration amendments](docs/PREREGISTRATION_AMENDMENTS.md).
+The full methodology is documented in [docs/RESEARCH_DESIGN.md](docs/RESEARCH_DESIGN.md).
 
 ## Data availability
 
-The original course dataset is not included because redistribution rights are unavailable. Public
-tests and examples use independently generated synthetic data. Empirical replication requires
-separately authorised access to compatible source data; no empirical result or source-derived
-aggregate is distributed here.
+The original course dataset is not included because redistribution rights are unavailable.
 
-The contribution of this repository is the research design and implementation, not evidence that
-the sentiment signal succeeds.
+The public repository contains:
 
-The expected schema and the boundary between public and restricted inputs are documented in
-[Data provenance](docs/DATA_PROVENANCE.md) and [the local data contract](data/README.md).
+- the complete research implementation;
+- the expected input schema;
+- a deterministic synthetic demonstration;
+- synthetic timing, accounting and leakage tests.
+
+Researchers who independently have authorised access to compatible source files can run the empirical workflow locally. The repository does not distribute empirical rows, empirical results or modified versions of the restricted dataset.
+
+See [data/README.md](data/README.md) and [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
 
 ## Quick start
 
-Python 3.12 or 3.13 and [uv](https://docs.astral.sh/uv/) are required.
+Python 3.12 or 3.13 and `uv` are required.
 
-```text
+~~~text
 uv sync --all-extras --locked
 uv --cache-dir .venv/uv-cache pip check
 uv run ruff check .
@@ -64,40 +51,30 @@ uv run mypy src
 uv run pytest -q
 uv run news-sentiment-trading synthetic-demo
 uv --cache-dir .venv/uv-cache build --no-build-isolation
-```
+~~~
 
-These commands require no private data, credentials, or local configuration. The synthetic
-demonstration is deterministic and exercises the same feature, signal, portfolio, and evaluation
-modules used by the empirical workflow.
+These commands use only synthetic data and require no credentials or private configuration.
 
 ## Repository structure
 
-- `src/news_sentiment_trading/` contains the research pipeline and command-line interface.
-- `tests/` contains synthetic known-answer, timing, leakage, accounting, and packaging tests.
-- `configs/primary.toml` contains the locked primary configuration.
-- `data/synthetic/` contains a small artificial schema example.
-- `docs/` covers architecture, methodology, provenance, limitations, and reproduction.
+- `src/news_sentiment_trading/`: features, signals, walk-forward evaluation, portfolio accounting, inference and reporting.
+- `tests/`: timing, leakage, accounting, inference and packaging tests.
+- `configs/primary.toml`: primary research configuration.
+- `data/synthetic/`: small synthetic schema example.
+- `docs/`: methodology, limitations, data handling and reproduction notes.
 
-## Limitations
+## Interpretation
 
-The sample is short and overlaps the COVID-19 crisis. Daily aggregates lack article timestamps,
-the adjusted-open convention relies on retrospective adjustment factors, transaction costs are
-stylized, and the strategy can have lower market exposure than its benchmark. See
-[Limitations](docs/LIMITATIONS.md) for the complete interpretation boundary.
+The public repository demonstrates the research process and implementation. It does not claim that news sentiment produces a profitable or statistically significant trading strategy.
 
-## Reproducibility
+The empirical sample is short, overlaps the COVID-19 crisis and uses daily aggregates without article timestamps. Transaction costs are simplified, and the strategy can hold cash while the benchmark remains fully invested.
 
-The public workflow verifies installation, code quality, tests, package builds, and the synthetic
-demonstration without external data. Users who independently possess authorised access to
-compatible source files can run the empirical commands described in
-[Reproducibility](docs/REPRODUCIBILITY.md).
+The complete list of limitations is in [docs/LIMITATIONS.md](docs/LIMITATIONS.md).
 
-## License and attribution
+## License and data rights
 
-Original code and documentation in this repository are available under the MIT License. The
-license does not cover the excluded course dataset, course material, team submission, or other
-third-party works. See [Third-party notices](THIRD_PARTY_NOTICES.md) and
-[Citation metadata](CITATION.cff).
+Original code, tests, documentation and synthetic examples are released under the MIT License.
 
-This repository is research software, not investment advice. It makes no claim of profitability,
-statistical significance, or readiness for live trading.
+The license does not cover the unavailable course dataset, third-party data, course material or team submissions. See [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
+
+This repository is for research and educational use and is not investment advice.
